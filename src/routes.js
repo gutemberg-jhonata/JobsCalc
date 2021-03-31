@@ -32,7 +32,7 @@ const jobs = [
 ];
 
 routes.get('/', (req, res) => {
-    return res.render(views + "index");
+    return res.render(views + "index", { jobs });
 })
 routes.get('/job', (req, res) => res.render(views + "job"))
 
