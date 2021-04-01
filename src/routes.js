@@ -18,6 +18,7 @@ const jobs = [
         name: "Pizzaria Guloso",
         dailyHours: 2,
         totalHours: 40,
+        budget: 4500,
         createdAt: Date.now(),
         updatedAt: Date.now(),
     },
@@ -26,13 +27,39 @@ const jobs = [
         name: "OneTwo Project",
         dailyHours: 3,
         totalHours: 47,
+        budget: 45000,
         createdAt: Date.now(),
         updatedAt: Date.now(),
     }
 ];
 
+function remainingDays(job) {
+    const remainingDays = (job.totalHours / job.dailyHours).toFixed();
+        
+    const createdDate = new Date(job.createdAt);
+    const dueDay = createdDate.getDate() + Number(remainingDays);
+    const dueDateInMs = createdDate.setDate(dueDay);
+    
+    const timeDiffInMs = dueDateInMs - Date.now();
+    const dayInMs = 1000 * 60 * 60 * 24;
+    const dayDiff = Math.floor(timeDiffInMs / dayInMs);
+
+    return dayDiff;
+}
+
 routes.get('/', (req, res) => {
-    return res.render(views + "index", { jobs });
+    const updatedJobs = jobs.map(job => {
+        const remaining = remainingDays(job);
+        const status = remaining ? 'progress' : 'done';
+
+        return {
+            ...job,
+            remaining,
+            status,
+        };
+    });
+
+    return res.render(views + "index", { jobs: updatedJobs });
 })
 routes.get('/job', (req, res) => res.render(views + "job"))
 
