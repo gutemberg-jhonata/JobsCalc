@@ -27,7 +27,7 @@ const jobs = [
         id: 2,
         name: "OneTwo Project",
         dailyHours: 3,
-        totalHours: 47,
+        totalHours: 3,
         budget: 45000,
         createdAt: Date.now(),
         updatedAt: Date.now(),
@@ -51,7 +51,7 @@ function remainingDays(job) {
 routes.get('/', (req, res) => {
     const updatedJobs = jobs.map(job => {
         const remaining = remainingDays(job);
-        const status = remaining ? 'progress' : 'done';
+        const status = remaining > 0 ? 'progress' : 'done';
 
         return {
             ...job,
