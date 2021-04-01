@@ -9,7 +9,8 @@ const profile = {
     monthlyBudget: 3000,
     hoursPerDay: 5,
     daysPerWeek: 5,
-    vacationPerYear: 4
+    vacationPerYear: 4,
+    valueHour: 4,
 }
 
 const jobs = [
@@ -56,6 +57,7 @@ routes.get('/', (req, res) => {
             ...job,
             remaining,
             status,
+            budget: profile.valueHour * job.totalHours,
         };
     });
 
