@@ -1,41 +1,8 @@
 const express = require("express");
 const routes = express.Router();
 
-const Profile = {
-    data: {
-        name: "Jhonata Gutemberg",
-        avatar: "http://github.com/gutemberg-jhonata.png",
-        monthlyBudget: 3000,
-        hoursPerDay: 5,
-        daysPerWeek: 5,
-        vacationPerYear: 4,
-        valueHour: 4,
-    },
-
-    controllers: {
-        index(req, res) {
-            return res.render("profile", { profile: Profile.data });
-        },
-
-        update(req, res) {
-            const data = Profile.data;
-
-            const weekPerYear = 52;
-            const weekPerMonth = (weekPerYear - data.vacationPerYear) / 12;
-            const weekTotalHours = data.hoursPerDay * data.daysPerWeek;
-            const monthlyTotalHours = weekTotalHours * weekPerMonth;
-            const valueHour = data.monthlyBudget / monthlyTotalHours;
-            
-            Profile.data = {
-                ...Profile.data,
-                ...req.body,
-                valueHour
-            }
-
-            return res.redirect('/profile');
-        }
-    }
-}
+const ProfileController = require("./controllers/ProfileController");
+const Profile = require("./models/Profile");
 
 const Job = {
     data: [
@@ -67,7 +34,7 @@ const Job = {
                     ...job,
                     remaining,
                     status,
-                    budget: Job.services.calculateBudget(job, Profile.data.valueHour),
+                    budget: Job.services.calculateBudget(job, Profile.get().valueHour),
                 };
             });
         
@@ -99,7 +66,7 @@ const Job = {
                 return res.send('Job not found!');
             }
 
-            job.budget = Job.services.calculateBudget(job, Profile.data.valueHour);
+            job.budget = Job.services.calculateBudget(job, Profile.get().valueHour);
 
             return res.render("job-edit", { job });
         },
@@ -166,7 +133,7 @@ routes.get('/job/:id', Job.controllers.show);
 routes.post('/job/:id', Job.controllers.update);
 routes.post('/job/delete/:id', Job.controllers.delete);
 
-routes.get('/profile', Profile.controllers.index);
-routes.post('/profile', Profile.controllers.update);
+routes.get('/profile', ProfileController.index);
+routes.post('/profile', ProfileController.update);
 
 module.exports = routes;
