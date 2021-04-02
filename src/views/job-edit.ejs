@@ -37,7 +37,7 @@
     </header>
 
     <div class="container flex animate-up delay-2">
-        <form id="form-job">
+        <form id="form-job" method="POST" action="/job/<%= job.id %> ">
           <fieldset>
             <legend>Dados do Job</legend>
             <div class="separator light"></div>
@@ -60,7 +60,7 @@
                   type="number"
                   step="0.1" 
                   id="daily-hours" 
-                  name="daily-hours"
+                  name="dailyHours"
                   value="<%= job.dailyHours %>"/>
               </div>
 
@@ -70,7 +70,7 @@
                 <input 
                   type="number"
                   id="total-hours" 
-                  name="total-hours"
+                  name="totalHours"
                   value="<%= job.totalHours %>" />
               </div>
             </div>

@@ -82,11 +82,10 @@ const Job = {
 
         save(req, res) {
             const lastId = Job.data[Job.data.length - 1]?.id || 0;
-            const body = req.body;
         
             Job.data.push({
                 id: lastId + 1,
-                ...body,
+                ...req.body,
                 createdAt: Date.now(),
                 updatedAt: Date.now(),
             });
@@ -96,7 +95,7 @@ const Job = {
 
         show(req, res) {
             const { id } = req.params;
-            const job = Job.data.find(job => job.id === Number(id));
+            const job = Job.data.find(job => Number(job.id) === Number(id));
 
             if (!job) {
                 return res.send('Job not found!');
@@ -105,6 +104,30 @@ const Job = {
             job.budget = Job.services.calculateBudget(job, Profile.data.valueHour);
 
             return res.render(views + "job-edit", { job });
+        },
+
+        update(req, res) {
+            const { id } = req.params;
+            const job = Job.data.find(job => Number(job.id) === Number(id));
+
+            if (!job) {
+                return res.send('Job not found!');
+            }
+
+            const updatedJob = {
+                ...job,
+                ...req.body
+            }
+
+            Job.data = Job.data.map(job => {
+                if (Number(job.id) === Number(id)) {
+                    job = updatedJob;
+                }
+
+                return job;
+            });
+
+            return res.redirect('/job/' + job.id);
         }
     },
 
@@ -124,18 +147,19 @@ const Job = {
         },
 
         calculateBudget(job, valueHour) {
-            return valueHour * job.totalHours
+            return valueHour * job.totalHours;
         }
     }
 }
 
-routes.get('/', Job.controllers.index)
+routes.get('/', Job.controllers.index);
 
-routes.get('/job', Job.controllers.create)
-routes.post('/job', Job.controllers.save)
-routes.get('/job/:id', Job.controllers.show)
+routes.get('/job', Job.controllers.create);
+routes.post('/job', Job.controllers.save);
+routes.get('/job/:id', Job.controllers.show);
+routes.post('/job/:id', Job.controllers.update);
 
-routes.get('/profile', Profile.controllers.index)
-routes.post('/profile', Profile.controllers.update)
+routes.get('/profile', Profile.controllers.index);
+routes.post('/profile', Profile.controllers.update);
 
 module.exports = routes;
