@@ -46,7 +46,6 @@ const Job = {
             name: "Pizzaria Guloso",
             dailyHours: 2,
             totalHours: 40,
-            budget: 4500,
             createdAt: Date.now(),
             updatedAt: Date.now(),
         },
@@ -55,7 +54,6 @@ const Job = {
             name: "OneTwo Project",
             dailyHours: 3,
             totalHours: 3,
-            budget: 45000,
             createdAt: Date.now(),
             updatedAt: Date.now(),
         }
@@ -71,7 +69,7 @@ const Job = {
                     ...job,
                     remaining,
                     status,
-                    budget: Profile.data.valueHour * job.totalHours,
+                    budget: Job.services.calculateBudget(job, Profile.data.valueHour),
                 };
             });
         
@@ -88,14 +86,25 @@ const Job = {
         
             Job.data.push({
                 id: lastId + 1,
-                name: body.name,
-                dailyHours: body["daily-hours"],
-                totalHours: body["total-hours"],
+                ...body,
                 createdAt: Date.now(),
                 updatedAt: Date.now(),
             });
         
             return res.redirect('/');    
+        },
+
+        show(req, res) {
+            const { id } = req.params;
+            const job = Job.data.find(job => job.id === Number(id));
+
+            if (!job) {
+                return res.send('Job not found!');
+            }
+
+            job.budget = Job.services.calculateBudget(job, Profile.data.valueHour);
+
+            return res.render(views + "job-edit", { job });
         }
     },
 
@@ -113,6 +122,10 @@ const Job = {
         
             return dayDiff;
         },
+
+        calculateBudget(job, valueHour) {
+            return valueHour * job.totalHours
+        }
     }
 }
 
@@ -120,7 +133,7 @@ routes.get('/', Job.controllers.index)
 
 routes.get('/job', Job.controllers.create)
 routes.post('/job', Job.controllers.save)
-routes.get('/job/edit', (req, res) => res.render(views + "job-edit"))
+routes.get('/job/:id', Job.controllers.show)
 
 routes.get('/profile', Profile.controllers.index)
 routes.post('/profile', Profile.controllers.update)
