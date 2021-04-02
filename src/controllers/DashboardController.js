@@ -15,10 +15,10 @@ module.exports = {
                 ...job,
                 remaining,
                 status,
-                budget: jobUtils.calculateBudget(job, profile.valueHour),
+                budget: JobUtils.calculateBudget(job, profile.valueHour),
             };
         });
 
-        return res.render("index", { jobs: updatedJobs });
+        return res.render("index", { jobs: updatedJobs, profile });
     }
 }
