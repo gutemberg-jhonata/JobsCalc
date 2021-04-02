@@ -6,14 +6,14 @@ module.exports = {
     },
     
     update(req, res) {
-        const data = Profile.get();
+        const data = req.body;
     
         const weekPerYear = 52;
         const weekPerMonth = (weekPerYear - data.vacationPerYear) / 12;
         const weekTotalHours = data.hoursPerDay * data.daysPerWeek;
         const monthlyTotalHours = weekTotalHours * weekPerMonth;
         const valueHour = data.monthlyBudget / monthlyTotalHours;
-        
+
         Profile.update({
             ...Profile.get(),
             ...req.body,

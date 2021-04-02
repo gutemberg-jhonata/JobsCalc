@@ -44,6 +44,7 @@ module.exports = {
     show(req, res) {
         const { id } = req.params;
         const jobs = Job.get();
+        const profile = Profile.get();
 
         const job = jobs.find(job => Number(job.id) === Number(id));
 
