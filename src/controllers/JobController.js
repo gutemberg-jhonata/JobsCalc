@@ -12,7 +12,7 @@ module.exports = {
         const jobs = Job.get();
         const lastId = jobs[jobs.length - 1]?.id || 0;
 
-        Job.save({
+        Job.create({
             id: lastId + 1,
             ...req.body,
             createdAt: Date.now(),

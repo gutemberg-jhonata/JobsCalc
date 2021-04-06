@@ -22,7 +22,7 @@ module.exports = {
         return data;
     },
 
-    save(newJob) {
+    create(newJob) {
         data.push(newJob);
     },
 
