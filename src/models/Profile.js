@@ -19,12 +19,13 @@ module.exports = {
 
         await db.close();
 
-        const valueHour = JobUtils.calculateValueHour(
-            data.vacation_per_year,
-            data.hours_per_day,
-            data.days_per_week,
-            data.monthly_budget
-        );
+        const valueHour = data.value_hour || 
+            JobUtils.calculateValueHour(
+                data.vacation_per_year,
+                data.hours_per_day,
+                data.days_per_week,
+                data.monthly_budget
+            );
 
         return {
             name: data.name,
@@ -37,7 +38,20 @@ module.exports = {
         };
     },
 
-    update(newData) {
-        data = newData;
+    async update(newData) {
+        const db = await Database();
+
+        await db.run(`
+            UPDATE profile SET 
+                name = '${newData.name}',
+                avatar = '${newData.avatar}',
+                monthly_budget = ${newData.monthlyBudget},
+                hours_per_day = ${newData.hoursPerDay},
+                days_per_week = ${newData.daysPerWeek},
+                vacation_per_year = ${newData.vacationPerYear},
+                value_hour = ${newData.valueHour}
+        `);
+
+        await db.close();
     },
 };
