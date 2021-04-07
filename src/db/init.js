@@ -14,4 +14,14 @@ CREATE TABLE profile (
     value-hour INT,
 )`)
 
+Database.exec(`
+CREATE TABLE jobs (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT,
+    daily-hours INT,
+    total-hours INT,
+    created_at DATETIME,
+    updated_at DATETIME
+)`)
+
 Databasea.close()
