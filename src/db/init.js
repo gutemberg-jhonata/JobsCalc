@@ -44,4 +44,36 @@ Database.run(`
     )
 `)
 
+Database.run(`
+    INSERT INTO jobs (
+        name,
+        daily_hours,
+        total_hours,
+        created_at,
+        updated_at
+    ) VALUES (
+        "Pizzaria Guloso",
+        2,
+        1,
+        ${Date.now()},
+        ${Date.now()}
+    )
+`)
+
+Database.run(`
+    INSERT INTO jobs (
+        name,
+        daily_hours,
+        total_hours,
+        created_at,
+        updated_at
+    ) VALUES (
+        "OneTwo Project",
+        3,
+        47,
+        ${Date.now()},
+        ${Date.now()}
+    )
+`)
+
 Databasea.close()
