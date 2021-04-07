@@ -15,5 +15,15 @@ module.exports = {
 
     calculateBudget(job, valueHour) {
         return valueHour * job.totalHours;
+    },
+
+    calculateValueHour(vacationPerYear, hoursPerDay, daysPerWeek, monthlyBudget) {
+        const weekPerYear = 52;
+        const weekPerMonth = (weekPerYear - vacationPerYear) / 12;
+        const weekTotalHours = hoursPerDay * daysPerWeek;
+        const monthlyTotalHours = weekTotalHours * weekPerMonth;
+        const valueHour = monthlyBudget / monthlyTotalHours;
+    
+        return valueHour;
     }
 }
