@@ -9,11 +9,7 @@ module.exports = {
     },
 
     async save(req, res) {
-        const jobs = await Job.get();
-        const lastId = jobs[jobs.length - 1]?.id || 0;
-
-        Job.create({
-            id: lastId + 1,
+        await Job.create({
             ...req.body,
             createdAt: Date.now(),
             updatedAt: Date.now(),

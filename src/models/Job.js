@@ -37,8 +37,26 @@ module.exports = {
         }));
     },
 
-    create(newJob) {
-        data.push(newJob);
+    async create(newJob) {
+        const db = await Database();
+
+        await db.run(`
+            INSERT INTO jobs (
+                name,
+                daily_hours,
+                total_hours,
+                created_at,
+                updated_at
+            ) VALUES (
+                '${newJob.name}',
+                ${newJob.dailyHours},
+                ${newJob.totalHours},
+                ${newJob.createdAt},
+                ${newJob.updatedAt}
+            )
+        `);
+
+        await db.close();
     },
 
     update(newJobs) {
